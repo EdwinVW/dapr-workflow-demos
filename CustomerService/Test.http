@@ -1,0 +1,1 @@
+GET http://localhost:3600/v1.0/invoke/CustomerService/method/customer/john
