@@ -1,11 +1,12 @@
 namespace LoanApplicationService.Activities;
 
+using System.Text.Json;
 using Dapr.Client;
 using Dapr.Workflow;
 using LoanApplicationService.Models;
 using Microsoft.Extensions.Logging;
 
-public class DetermineExistingCustomerActivity : WorkflowActivity<ProspectInfo, bool>
+public class DetermineExistingCustomerActivity : WorkflowActivity<string, CustomerInfo?>
 {
     private readonly ILogger _logger;
 
@@ -14,14 +15,19 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<ProspectInfo, 
         _logger = loggerFactory.CreateLogger<DetermineExistingCustomerActivity>();
     }
 
-    public override async Task<bool> RunAsync(WorkflowActivityContext context, ProspectInfo prospectInfo)
+    public override async Task<CustomerInfo?> RunAsync(WorkflowActivityContext context, string applicantName)
     {
         using var client = new DaprClientBuilder().Build();
-        var request = client.CreateInvokeMethodRequest(HttpMethod.Get, "CustomerService", $"customer/{prospectInfo.Name}");
+        var request = client.CreateInvokeMethodRequest(HttpMethod.Get, "CustomerService", $"customer/{applicantName}");
         var response = await client.InvokeMethodWithResponseAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogInformation($"Called CustomerService. Customer NOT FOUND.");
+            return null;
+        }
 
-        _logger.LogInformation($"Called CustomerService. Result statuscode: {response.StatusCode}.");
-
-        return response.IsSuccessStatusCode;
+        var customerInfo = await JsonSerializer.DeserializeAsync<CustomerInfo>(await response.Content.ReadAsStreamAsync());
+        _logger.LogInformation($"Called CustomerService. Customer FOUND.");
+        return customerInfo;
     }
 }

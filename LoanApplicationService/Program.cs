@@ -31,17 +31,6 @@ if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_GRPC_PORT")))
     Environment.SetEnvironmentVariable("DAPR_GRPC_PORT", "4001");
 }
 
-Console.ForegroundColor = ConsoleColor.White;
-Console.WriteLine("*** Welcome to the Dapr Workflow console app sample!");
-Console.WriteLine("*** Using this app, you can place orders that start workflows.");
-Console.WriteLine("*** Ensure that Dapr is running in a separate terminal window using the following command:");
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine("        dapr run --dapr-grpc-port 4001 --app-id wfapp");
-Console.WriteLine();
-Console.ResetColor();
-
-// Start the app - this is the point where we connect to the Dapr sidecar to
-// listen for workflow work-items to execute.
 using var host = builder.Build();
 host.Start();
 
@@ -61,7 +50,7 @@ Console.WriteLine("Workflow engine initialized.");
 
 var workflowClient = host.Services.GetRequiredService<WorkflowEngineClient>();
 
-// Start the workflow using the order ID as the workflow ID
+// Start the workflow
 var instanceId = Guid.NewGuid().ToString("D");
 Console.WriteLine($"Starting Loan Application workflow with instanceId '{instanceId}'");
 var loanApplication = new LoanApplication("John Doe", 50000, 100000);
@@ -75,9 +64,7 @@ WorkflowState state;
 do
 {
     Thread.Sleep(1000);
-    state = await workflowClient.GetWorkflowStateAsync(
-        instanceId: instanceId,
-        getInputsAndOutputs: true);
+    state = await workflowClient.GetWorkflowStateAsync(instanceId: instanceId, getInputsAndOutputs: true);
 } while (!state.IsWorkflowCompleted);
 
 if (state.RuntimeStatus == WorkflowRuntimeStatus.Completed)
@@ -92,7 +79,8 @@ if (state.RuntimeStatus == WorkflowRuntimeStatus.Completed)
     else
     {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine($"Loan Appliction workflow is {state.RuntimeStatus} and the application declined.");
+        Console.WriteLine($"Loan Appliction workflow is {state.RuntimeStatus} and the application was declined.");
+        Console.ResetColor();
     }
 }
 else if (state.RuntimeStatus == WorkflowRuntimeStatus.Failed)

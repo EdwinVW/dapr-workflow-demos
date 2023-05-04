@@ -1,1 +1,23 @@
-GET http://localhost:3600/v1.0/invoke/CustomerService/method/customer/john
+# Outstanding below 100000, never defaulted
+GET http://localhost:5070/customer/Eric%20White
+
+###
+
+# Outstanding above 100000, never defaulted
+GET http://localhost:5070/customer/Eric%20Grey
+
+###
+
+# Outstanding above 100000, has defaulted
+GET http://localhost:5070/customer/Eric%20Black
+
+###
+
+# Random
+GET http://localhost:5070/customer/Eric%20Weiss
+
+###
+
+# Not Fuond
+GET http://localhost:5070/customer/John%20Doe
+
