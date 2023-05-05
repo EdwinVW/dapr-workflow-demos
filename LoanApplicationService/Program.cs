@@ -11,12 +11,14 @@ var builder = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 {
     services.AddDaprWorkflow(options =>
     {
-        // Note that it's also possible to register a lambda function as the workflow
-        // or activity implementation instead of a class.
+        // Register workflows
         options.RegisterWorkflow<LoanApplicationWorkflow>();
 
-        // These are the activities that get invoked by the workflow(s).
+        // Register activities
         options.RegisterActivity<DetermineExistingCustomerActivity>();
+        options.RegisterActivity<RegisterProspectActivity>();
+        options.RegisterActivity<DetermineRiskProfileActivity>();
+        options.RegisterActivity<AssessApplicationActivity>();
     });
 });
 
@@ -48,7 +50,7 @@ Thread.Sleep(TimeSpan.FromSeconds(1));
 
 Console.WriteLine("Workflow engine initialized.");
 
-var workflowClient = host.Services.GetRequiredService<WorkflowEngineClient>();
+var workflowClient = host.Services.GetRequiredService<DaprWorkflowClient>();
 
 // Start the workflow
 var instanceId = Guid.NewGuid().ToString("D");
@@ -58,6 +60,9 @@ await workflowClient.ScheduleNewWorkflowAsync(
     name: nameof(LoanApplicationWorkflow),
     instanceId: instanceId,
     input: loanApplication);
+
+// Schedule an event that will be picked-up later
+await workflowClient.RaiseEventAsync(instanceId, "CustomerContacted", new CustomerContacted(true));
 
 // Wait for the workflow to complete
 WorkflowState state;

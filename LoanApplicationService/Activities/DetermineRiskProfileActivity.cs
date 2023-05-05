@@ -1,22 +1,22 @@
-// namespace LoanApplicationService.Activities;
+namespace LoanApplicationService.Activities;
 
-// using Dapr.Client;
-// using Dapr.Workflow;
-// using LoanApplicationService.Models;
-// using Microsoft.Extensions.Logging;
+using Dapr.Workflow;
+using LoanApplicationService.Models;
+using Microsoft.Extensions.Logging;
 
-// public class DetermineRiskProfileActivity : WorkflowActivity<string, ProspectInfo>
-// {
-//     private readonly ILogger _logger;
+public class DetermineRiskProfileActivity : WorkflowActivity<ApplicationInfo, RiskProfile>
+{
+    private readonly ILogger _logger;
 
-//     public DetermineRiskProfileActivity(ILoggerFactory loggerFactory)
-//     {
-//         _logger = loggerFactory.CreateLogger<DetermineRiskProfileActivity>();
-//     }
+    public DetermineRiskProfileActivity(ILoggerFactory loggerFactory)
+    {
+        _logger = loggerFactory.CreateLogger<DetermineRiskProfileActivity>();
+    }
 
-//     public override Task<ProspectInfo> RunAsync(WorkflowActivityContext context, string name)
-//     {
-//         string prospectId = Guid.NewGuid().ToString("D");
-//         return Task.FromResult(new ProspectInfo(prospectId, name));
-//     }
-// }
+    public override Task<RiskProfile> RunAsync(WorkflowActivityContext context, ApplicationInfo applicationInfo)
+    {
+        _logger.LogInformation($"Determine Risk Profile (2 + A,C).");
+        var riskProfile = new RiskProfile(2, new string[] { "A", "C" });
+        return Task.FromResult(riskProfile);
+    }
+}
