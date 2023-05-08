@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Dapr.Workflow;
 using FrontEnd.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddDaprWorkflow(options => {});
+
+// Dapr uses a random ports by default. If we don't know what that port
+// is (because this app was started separate from dapr), then assume 3500 and 4001.
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_HTTP_PORT")))
+{
+    Environment.SetEnvironmentVariable("DAPR_HTTP_PORT", "3700");
+}
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_GRPC_PORT")))
+{
+    Environment.SetEnvironmentVariable("DAPR_GRPC_PORT", "4002");
+}
 
 var app = builder.Build();
 

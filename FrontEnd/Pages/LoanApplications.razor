@@ -1,0 +1,41 @@
+﻿@page "/loanapplications"
+@using Dapr.Workflow
+@inject ILoggerFactory LoggerFactory
+@inject DaprWorkflowClient WorkflowClient
+
+<PageTitle>Loan Applications</PageTitle>
+
+<h1>Proposals</h1>
+<p>
+    <label>
+        Loan-application Id:
+        <InputText @bind-Value="loanApplicationId" />
+    </label>
+</p>
+<p>
+    <label>
+        Proposal accepted:
+        <InputCheckbox @bind-Value="proposalAccepted" />
+    </label>
+</p>
+<p>
+    <button class="btn btn-primary" @onclick="SubmitProposalAcceptance">Submit</button>
+</p>
+
+<hr/>
+
+
+@code {
+    
+    private string loanApplicationId = "";
+    private bool proposalAccepted = false;
+
+    private async Task SubmitProposalAcceptance()
+    {
+        await WorkflowClient.RaiseEventAsync(loanApplicationId, "CustomerContacted", new { Accepted = true});
+
+        var logger = LoggerFactory.CreateLogger("LoanApplication");
+        var status = proposalAccepted ? "accepted" : "declined";
+        logger.LogInformation($"Proposal for id '{loanApplicationId}' was {status}.");
+    }
+}

@@ -10,11 +10,6 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
 {
     public override async Task<ApplicationResult> RunAsync(WorkflowContext context, LoanApplication application)
     {
-        var logger = LoggerFactory.Create(builder =>
-        {
-            builder.AddConsole();
-        }).CreateLogger<LoanApplicationWorkflow>();
-
         try
         {
             // Determine whether the applicant is already an existing customer with us
@@ -45,9 +40,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
                 applicationInfo);
 
             // Contact the customer
-            logger.LogInformation("Waiting for external event: CustomerContacted ...");
             var customerContacted = await context.WaitForExternalEventAsync<CustomerContacted>("CustomerContacted", TimeSpan.FromSeconds(120));
-            logger.LogInformation("Received external event: CustomerContacted.");
 
             return new ApplicationResult(true);
         }

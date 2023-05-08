@@ -1,4 +1,20 @@
-@instanceId = 
-
-POST http://localhost:3500/v1.0-alpha1/workflows/dapr/LoanApplicationWorkflow/{{instanceId}}/start
+# @name startLoanApplication
+POST http://localhost:5108/LoanApplication
 Content-Type: application/json
+
+{
+    "ApplicantName": "Eric White",
+    "LoanAmount": 50000,
+    "YearlyGrossSalary": 100000
+}
+
+###
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:5108/LoanApplication/{{instanceId}}
+Content-Type: application/json
+
+{
+    "Accepted": false
+}
