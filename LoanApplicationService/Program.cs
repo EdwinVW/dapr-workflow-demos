@@ -50,12 +50,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Wait for the sidecar to become available
-// using var daprClient = new DaprClientBuilder().Build();
-// while (!await daprClient.CheckHealthAsync())
-// {
-//     Thread.Sleep(TimeSpan.FromSeconds(2));
-// }
-// Console.WriteLine("Workflow engine initialized.");
-
 app.Run();

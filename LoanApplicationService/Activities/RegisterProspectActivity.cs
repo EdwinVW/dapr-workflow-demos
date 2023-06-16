@@ -15,7 +15,7 @@ public class RegisterProspectActivity : WorkflowActivity<string, ProspectInfo>
 
     public override Task<ProspectInfo> RunAsync(WorkflowActivityContext context, string applicantName)
     {
-        _logger.LogInformation($"Register new prospect.");
+        _logger.LogInformation($"[Workflow {context.InstanceId}] Register new prospect.");
         string prospectId = Guid.NewGuid().ToString("D");
         return Task.FromResult(new ProspectInfo(prospectId, applicantName));
     }

@@ -1,4 +1,0 @@
-@instanceId = 
-
-POST http://localhost:3500/v1.0-alpha1/workflows/dapr/LoanApplicationWorkflow/{{instanceId}}/start
-Content-Type: application/json

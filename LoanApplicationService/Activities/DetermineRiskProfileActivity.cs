@@ -15,7 +15,7 @@ public class DetermineRiskProfileActivity : WorkflowActivity<ApplicationInfo, Ri
 
     public override Task<RiskProfile> RunAsync(WorkflowActivityContext context, ApplicationInfo applicationInfo)
     {
-        _logger.LogInformation($"Determine Risk Profile (2 + A,C).");
+        _logger.LogInformation($"[Workflow {context.InstanceId}] Determine Risk Profile (2 + A,C).");
         var riskProfile = new RiskProfile(2, new string[] { "A", "C" });
         return Task.FromResult(riskProfile);
     }

@@ -21,8 +21,8 @@ public class LoanApplicationController : ControllerBase
     [HttpPost(Name = "StartLoanApplication")]
     public async Task<LoanApplicationStarted> StartLoanApplication(LoanApplication loanApplication)
     {
-        var instanceId = Guid.NewGuid().ToString("D");
-        
+        var instanceId = GenerateId();
+
         _logger.LogInformation($"Starting Loan Application workflow with instanceId '{instanceId}'");
 
         await _workflowClient.ScheduleNewWorkflowAsync(
@@ -33,14 +33,19 @@ public class LoanApplicationController : ControllerBase
         return new LoanApplicationStarted(instanceId);
     }
 
-    [HttpPost("{instanceId}", Name = "CustomerContacted")]
-    public async Task<IActionResult> CustomerContacted(string instanceId, CustomerContacted customerContacted)
+    [HttpPost("{instanceId}/CustomerContacted", Name = "CustomerContacted")]
+    public async Task<IActionResult> CustomerContacted(string instanceId, [FromBody] CustomerContacted customerContacted)
     {
-        var status = customerContacted.Accepted ? "accepted" : "declined";
-        _logger.LogInformation($"Proposal for loan application with instanceId '{instanceId}' was {status}.");
-
+        var result = customerContacted.Accepted ? "Accepted" : "Declined";
+        _logger.LogInformation($"Raise external event 'CustomerContacted' (result: {result}).");
         await _workflowClient.RaiseEventAsync(instanceId, "CustomerContacted", customerContacted);
-
         return Ok();
-    }    
+    }
+
+    private string GenerateId()
+    {
+        var ticks = new DateTime(2016, 1, 1).Ticks;
+        var diff = DateTime.Now.Ticks - ticks;
+        return diff.ToString("x");
+    }
 }

@@ -12,9 +12,9 @@ Content-Type: application/json
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:5108/LoanApplication/{{instanceId}}
+POST http://localhost:5108/LoanApplication/{{instanceId}}/CustomerContacted
 Content-Type: application/json
 
 {
-    "Accepted": false
+    "Accepted": true
 }

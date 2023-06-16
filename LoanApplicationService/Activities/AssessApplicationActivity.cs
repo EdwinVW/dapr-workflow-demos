@@ -15,7 +15,7 @@ public class AssessApplicationActivity : WorkflowActivity<ApplicationInfo, bool>
 
     public override Task<bool> RunAsync(WorkflowActivityContext context, ApplicationInfo applicationInfo)
     {
-        _logger.LogInformation($"Assess Application.");
+        _logger.LogInformation($"[Workflow {context.InstanceId}] Assess Application.");
         Task.Delay(TimeSpan.FromSeconds(25));
         return Task.FromResult(true);
     }

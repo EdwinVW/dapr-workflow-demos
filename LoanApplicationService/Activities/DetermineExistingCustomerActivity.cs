@@ -22,7 +22,7 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
         var response = await client.InvokeMethodWithResponseAsync(request);
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogInformation($"Called CustomerService. Customer NOT FOUND.");
+            _logger.LogInformation($"[Workflow {context.InstanceId}] Called CustomerService. Customer NOT FOUND.");
             return null;
         }
 

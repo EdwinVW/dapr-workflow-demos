@@ -64,9 +64,13 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             _riskClauses = riskProfile.RiskClauses;
 
             // Contact the customer
-            logger.LogInformation("Waiting for external event: CustomerContacted ...");
+            logger.LogInformation($"[Workflow {context.InstanceId}] Waiting for external event: CustomerContacted ...");
             var customerContacted = await context.WaitForExternalEventAsync<CustomerContacted>("CustomerContacted", TimeSpan.FromSeconds(120));
-            logger.LogInformation("Received external event: CustomerContacted.");
+            logger.LogInformation($"[Workflow {context.InstanceId}] Received external event: CustomerContacted.");
+
+            var proposalResult = customerContacted == null ? "unknown" : 
+                customerContacted.Accepted ? "accepted" : "declined";
+            logger.LogInformation($"[Workflow {context.InstanceId}] Proposal for loan application was {proposalResult}.");
 
             return new ApplicationResult(true);
         }
