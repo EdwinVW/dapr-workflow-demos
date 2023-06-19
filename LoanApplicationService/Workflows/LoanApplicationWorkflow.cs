@@ -90,7 +90,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
                 await Log(context, $"Waiting for external event: CustomerProposalDecisionReceived ...");
                 var customerProposalDecisionReceived =
                     await context.WaitForExternalEventAsync<CustomerProposalDecisionReceived>(
-                        "CustomerProposalDecisionReceived", TimeSpan.FromDays(14));
+                        "CustomerProposalDecisionReceived", TimeSpan.FromSeconds(10));
                 proposalAccepted = customerProposalDecisionReceived.Accepted;
                 await Log(context, $"Proposal was {(proposalAccepted ? "Accepted" : "Rejected")}.");
             }
@@ -109,7 +109,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
                     await context.WaitForExternalEventAsync<CustomerContactedForProposal>(
                         "CustomerContactedForProposal");
                 proposalAccepted = customerContactedForProposal.Accepted;
-                await Log(context, $"Proposal for loan application was {(proposalAccepted ? "Accepted" : "Declined")}.");
+                await Log(context, $"Loan proposal was {(proposalAccepted ? "Accepted" : "Declined")}.");
             }
 
             // Handle proposal acceptance
@@ -119,10 +119,14 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             }
 
             // Register Contract
-            //TODO
+            await context.CallActivityAsync<object?>(
+                nameof(RegisterContractActivity),
+                loanInfo);
 
             // Send contract
-            // TODO
+            await context.CallActivityAsync<object?>(
+                nameof(SendContractActivity),
+                loanInfo);
 
             return new ApplicationResult(true);
         }
@@ -135,7 +139,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
 
     private async Task<object?> Log(WorkflowContext context, string message)
     {
-        return await context.CallActivityAsync<string>(nameof(LogActivity),message);
+        return await context.CallActivityAsync<string>(nameof(LogActivity), message);
     }
 
     private async Task<CustomerInfo?> DetermineExistingCustomer(WorkflowContext context, string applicantName)

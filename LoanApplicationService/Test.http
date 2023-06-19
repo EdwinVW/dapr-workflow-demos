@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "ApplicantName": "Eric White",
-    "LoanAmount": 25000,
+    "LoanAmount": 100000,
     "YearlyGrossSalary": 80000
 }
 

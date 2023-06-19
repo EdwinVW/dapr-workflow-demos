@@ -24,6 +24,8 @@ builder.Services.AddDaprWorkflow(options =>
     options.RegisterActivity<RegisterCustomerActivity>();
     options.RegisterActivity<SendProposalActivity>();
     options.RegisterActivity<SendRejectionLetterActivity>();
+    options.RegisterActivity<RegisterContractActivity>();
+    options.RegisterActivity<SendContractActivity>();
 });
 
 // Dapr uses a random ports by default. If we don't know what these ports are,
