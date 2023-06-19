@@ -15,10 +15,10 @@ public class SendProposalActivity : WorkflowActivity<LoanInfo, object?>
 
     public override Task<object?> RunAsync(WorkflowActivityContext context, LoanInfo loanInfo)
     {
-        _logger.LogInformation($"[Workflow {context.InstanceId}] Send loan proposal.");
-
         // Send proposal
         // TODO
+
+        _logger.LogInformation($"[Workflow {context.InstanceId}] - Loan proposal was sent.");
         
         return Task.FromResult<object?>(null);
     }

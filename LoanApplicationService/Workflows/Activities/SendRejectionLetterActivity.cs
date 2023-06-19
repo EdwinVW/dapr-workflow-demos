@@ -15,10 +15,10 @@ public class SendRejectionLetterActivity : WorkflowActivity<LoanInfo, object?>
 
     public override Task<object?> RunAsync(WorkflowActivityContext context, LoanInfo loanInfo)
     {
-        _logger.LogInformation($"[Workflow {context.InstanceId}] Send rejection letter.");
-
         // Send letter
         // TODO
+
+        _logger.LogInformation($"[Workflow {context.InstanceId}] - Rejection letter was sent.");
 
         return Task.FromResult<object?>(null);
     }

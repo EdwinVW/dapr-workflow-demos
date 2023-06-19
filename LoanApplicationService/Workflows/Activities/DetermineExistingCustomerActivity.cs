@@ -26,12 +26,13 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
         
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogInformation($"[Workflow {context.InstanceId}] Called CustomerService. Customer NOT FOUND.");
+            _logger.LogInformation(
+                $"[Workflow {context.InstanceId}] - Called CustomerService. Customer was NOT FOUND.");
             return null;
         }
 
         var customerInfo = await JsonSerializer.DeserializeAsync<CustomerInfo>(await response.Content.ReadAsStreamAsync());
-        _logger.LogInformation($"Called CustomerService. Customer FOUND.");
+        _logger.LogInformation($"Called CustomerService. Customer was FOUND.");
         return customerInfo;
     }
 }

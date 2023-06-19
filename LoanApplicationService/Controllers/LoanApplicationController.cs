@@ -25,8 +25,6 @@ public class LoanApplicationController : ControllerBase
     {
         var instanceId = GenerateId();
 
-        _logger.LogInformation($"Starting Loan Application workflow with instanceId '{instanceId}'");
-
         await _workflowClient.ScheduleNewWorkflowAsync(
             name: nameof(LoanApplicationWorkflow),
             instanceId: instanceId,

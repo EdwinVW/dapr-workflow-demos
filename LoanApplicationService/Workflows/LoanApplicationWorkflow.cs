@@ -43,26 +43,21 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
                 nameof(DetermineRiskProfileActivity),
                 applicationInfo);
 
-            logger.LogInformation($"[Workflow {context.InstanceId}] Risk profile determined: {riskProfile.Print()}.");
-
             // Approve the loan
             bool loanApproved = false;
             if (riskProfile.RiskClass < 3)
             {
                 loanApproved = true;
-                logger.LogInformation($"[Workflow {context.InstanceId}] Loan aproved.");
+                await Log(context, $"Loan was aproved.");
             }
             else
             {
                 // Assess the application
-                logger.LogInformation($"[Workflow {context.InstanceId}] Waiting for external event: LoanAssessmentCompleted ...");
+                await Log(context, $"Waiting for external event: LoanAssessmentCompleted ...");
                 var loanAssessmentCompleted = await context.WaitForExternalEventAsync<LoanAssessmentCompleted>(
                     "LoanAssessmentCompleted");
-
-                logger.LogInformation($"[Workflow {context.InstanceId}] Received external event: LoanAssessmentCompleted.");
                 loanApproved = loanAssessmentCompleted.Approved;
-                logger.LogInformation($"[Workflow {context.InstanceId}] Loan was {(loanApproved ? "Approved" : "Rejected")}.");
-
+                await Log(context, $"Loan was {(loanApproved ? "Approved" : "Rejected")}.");
             }
 
             // Collect loan info
@@ -92,14 +87,12 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             bool proposalAccepted = false;
             try
             {
-                logger.LogInformation($"[Workflow {context.InstanceId}] Waiting for external event: CustomerProposalDecisionReceived ...");
-                var customerProposalDecisionReceived = 
+                await Log(context, $"Waiting for external event: CustomerProposalDecisionReceived ...");
+                var customerProposalDecisionReceived =
                     await context.WaitForExternalEventAsync<CustomerProposalDecisionReceived>(
                         "CustomerProposalDecisionReceived", TimeSpan.FromDays(14));
-
-                logger.LogInformation($"[Workflow {context.InstanceId}] Received external event: CustomerProposalDecisionReceived.");
                 proposalAccepted = customerProposalDecisionReceived.Accepted;
-                logger.LogInformation($"[Workflow {context.InstanceId}] Proposal was {(proposalAccepted ? "Accepted" : "Rejected")}.");
+                await Log(context, $"Proposal was {(proposalAccepted ? "Accepted" : "Rejected")}.");
             }
             catch (TaskCanceledException)
             {
@@ -111,15 +104,12 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             if (!customerDecisionReceivedWithinTimeout)
             {
                 // Contact the customer
-                logger.LogInformation($"[Workflow {context.InstanceId}] Waiting for external event: CustomerContactedForProposal ...");
-                var customerContactedForProposal = 
+                await Log(context, $"Waiting for external event: CustomerContactedForProposal ...");
+                var customerContactedForProposal =
                     await context.WaitForExternalEventAsync<CustomerContactedForProposal>(
                         "CustomerContactedForProposal");
-
-                // Customer was contacted
-                logger.LogInformation($"[Workflow {context.InstanceId}] Received external event: CustomerContactedForProposal.");
                 proposalAccepted = customerContactedForProposal.Accepted;
-                logger.LogInformation($"[Workflow {context.InstanceId}] Proposal for loan application was {(proposalAccepted ? "Accepted" : "Declined")}.");
+                await Log(context, $"Proposal for loan application was {(proposalAccepted ? "Accepted" : "Declined")}.");
             }
 
             // Handle proposal acceptance
@@ -141,6 +131,11 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             Console.WriteLine(ex.ToString());
             throw;
         }
+    }
+
+    private async Task<object?> Log(WorkflowContext context, string message)
+    {
+        return await context.CallActivityAsync<string>(nameof(LogActivity),message);
     }
 
     private async Task<CustomerInfo?> DetermineExistingCustomer(WorkflowContext context, string applicantName)

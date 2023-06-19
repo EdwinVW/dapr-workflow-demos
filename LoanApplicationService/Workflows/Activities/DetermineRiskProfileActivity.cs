@@ -15,8 +15,6 @@ public class DetermineRiskProfileActivity : WorkflowActivity<ApplicationInfo, Ri
 
     public override Task<RiskProfile> RunAsync(WorkflowActivityContext context, ApplicationInfo applicationInfo)
     {
-        _logger.LogInformation($"[Workflow {context.InstanceId}] Determine Risk Profile.");
-
         int riskClass = 0;
         var riskClauses = new List<RiskClause>();
 
@@ -51,6 +49,11 @@ public class DetermineRiskProfileActivity : WorkflowActivity<ApplicationInfo, Ri
             riskClauses.Add(RiskClause.C);
         }
 
-        return Task.FromResult(new RiskProfile(riskClass, riskClauses.ToArray()));
+        var riskProfile = new RiskProfile(riskClass, riskClauses.ToArray());
+
+        _logger.LogInformation(
+            $"[Workflow {context.InstanceId}] - Risk profile was determined: {riskProfile.Print()}.");
+
+        return Task.FromResult(riskProfile);
     }
 }

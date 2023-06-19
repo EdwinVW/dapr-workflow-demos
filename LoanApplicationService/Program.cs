@@ -18,6 +18,7 @@ builder.Services.AddDaprWorkflow(options =>
     options.RegisterWorkflow<LoanApplicationWorkflow>();
 
     // Register activities
+    options.RegisterActivity<LogActivity>();
     options.RegisterActivity<DetermineExistingCustomerActivity>();
     options.RegisterActivity<DetermineRiskProfileActivity>();
     options.RegisterActivity<RegisterCustomerActivity>();

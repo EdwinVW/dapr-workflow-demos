@@ -3,9 +3,9 @@ POST http://localhost:5108/LoanApplication
 Content-Type: application/json
 
 {
-    "ApplicantName": "Eric Black",
-    "LoanAmount": 100000,
-    "YearlyGrossSalary": 100000
+    "ApplicantName": "Eric White",
+    "LoanAmount": 25000,
+    "YearlyGrossSalary": 80000
 }
 
 ### 
@@ -16,7 +16,7 @@ POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/
 Content-Type: application/json
 
 {
-    "Approved": false
+    "Approved": true
 }
 
 ### 
