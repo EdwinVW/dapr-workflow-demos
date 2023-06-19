@@ -1,16 +1,16 @@
+using System.Text.Json;
 using Dapr.Client;
 using Dapr.Workflow;
 using LoanApplicationService.Workflows;
-using LoanApplicationService.Activities;
+using LoanApplicationService.Workflows.Activities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDaprClient();
 
 builder.Services.AddDaprWorkflow(options =>
 {
@@ -19,13 +19,14 @@ builder.Services.AddDaprWorkflow(options =>
 
     // Register activities
     options.RegisterActivity<DetermineExistingCustomerActivity>();
-    options.RegisterActivity<RegisterProspectActivity>();
     options.RegisterActivity<DetermineRiskProfileActivity>();
-    options.RegisterActivity<AssessApplicationActivity>();
+    options.RegisterActivity<RegisterCustomerActivity>();
+    options.RegisterActivity<SendProposalActivity>();
+    options.RegisterActivity<SendRejectionLetterActivity>();
 });
 
-// Dapr uses a random ports by default. If we don't know what that port
-// is (because this app was started separate from dapr), then assume 3500 and 4001.
+// Dapr uses a random ports by default. If we don't know what these ports are,
+// (because this app was started separate from dapr), then assume 3500 and 4001.
 if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_HTTP_PORT")))
 {
     Environment.SetEnvironmentVariable("DAPR_HTTP_PORT", "3500");

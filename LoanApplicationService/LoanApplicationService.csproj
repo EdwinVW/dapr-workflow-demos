@@ -12,8 +12,4 @@
     <PackageReference Include="Dapr.Workflow" Version="1.11.0" />
   </ItemGroup>
 
-  <!-- <ItemGroup>
-    <ProjectReference Include="..\..\dotnet-sdk\src\Dapr.Workflow\Dapr.Workflow.csproj" />
-  </ItemGroup>   -->
-
 </Project>

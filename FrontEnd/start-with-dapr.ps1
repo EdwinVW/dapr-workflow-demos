@@ -1,1 +1,0 @@
-dapr run --app-id FrontEnd --dapr-http-port 3700 --dapr-grpc-port 4002 --app-port 5045 dotnet run

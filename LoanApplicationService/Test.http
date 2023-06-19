@@ -3,16 +3,38 @@ POST http://localhost:5108/LoanApplication
 Content-Type: application/json
 
 {
-    "ApplicantName": "Eric White",
-    "LoanAmount": 50000,
+    "ApplicantName": "Eric Black",
+    "LoanAmount": 100000,
     "YearlyGrossSalary": 100000
 }
 
-###
+### 
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:5108/LoanApplication/{{instanceId}}/CustomerContacted
+POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/LoanAssessmentCompleted
+Content-Type: application/json
+
+{
+    "Approved": false
+}
+
+### 
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerProposalDecisionReceived
+Content-Type: application/json
+
+{
+    "Accepted": true
+}
+
+### 
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerContactedForProposal
 Content-Type: application/json
 
 {

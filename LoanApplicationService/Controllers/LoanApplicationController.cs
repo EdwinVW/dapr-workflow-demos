@@ -12,10 +12,12 @@ public class LoanApplicationController : ControllerBase
     private readonly ILogger<LoanApplicationController> _logger;
     private readonly DaprWorkflowClient _workflowClient;
 
-    public LoanApplicationController(ILogger<LoanApplicationController> logger, DaprWorkflowClient workflowClient)
+    public LoanApplicationController(
+        ILogger<LoanApplicationController> logger, 
+        DaprWorkflowClient workflowClient)
     {
         _logger = logger;
-        this._workflowClient = workflowClient;
+        _workflowClient = workflowClient;
     }
 
     [HttpPost(Name = "StartLoanApplication")]
@@ -31,15 +33,6 @@ public class LoanApplicationController : ControllerBase
             input: loanApplication);
 
         return new LoanApplicationStarted(instanceId);
-    }
-
-    [HttpPost("{instanceId}/CustomerContacted", Name = "CustomerContacted")]
-    public async Task<IActionResult> CustomerContacted(string instanceId, [FromBody] CustomerContacted customerContacted)
-    {
-        var result = customerContacted.Accepted ? "Accepted" : "Declined";
-        _logger.LogInformation($"Raise external event 'CustomerContacted' (result: {result}).");
-        await _workflowClient.RaiseEventAsync(instanceId, "CustomerContacted", customerContacted);
-        return Ok();
     }
 
     private string GenerateId()

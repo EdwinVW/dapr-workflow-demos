@@ -1,4 +1,4 @@
-namespace LoanApplicationService.Activities;
+namespace LoanApplicationService.Workflows.Activities;
 
 using System.Text.Json;
 using Dapr.Client;
@@ -18,8 +18,12 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
     public override async Task<CustomerInfo?> RunAsync(WorkflowActivityContext context, string applicantName)
     {
         using var client = new DaprClientBuilder().Build();
-        var request = client.CreateInvokeMethodRequest(HttpMethod.Get, "CustomerService", $"customer/{applicantName}");
+        var request = client.CreateInvokeMethodRequest(
+            HttpMethod.Get, 
+            "CustomerService", 
+            $"customer/{applicantName}");
         var response = await client.InvokeMethodWithResponseAsync(request);
+        
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogInformation($"[Workflow {context.InstanceId}] Called CustomerService. Customer NOT FOUND.");
