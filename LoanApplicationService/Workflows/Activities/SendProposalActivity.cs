@@ -10,7 +10,7 @@ public class SendProposalActivity : WorkflowActivity<LoanInfo, object?>
 
     public SendProposalActivity(ILoggerFactory loggerFactory)
     {
-        _logger = loggerFactory.CreateLogger<RegisterCustomerActivity>();
+        _logger = loggerFactory.CreateLogger<SendProposalActivity>();
     }
 
     public override Task<object?> RunAsync(WorkflowActivityContext context, LoanInfo loanInfo)
