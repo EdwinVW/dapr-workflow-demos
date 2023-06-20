@@ -31,7 +31,8 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
             return null;
         }
 
-        var customerInfo = await JsonSerializer.DeserializeAsync<CustomerInfo>(await response.Content.ReadAsStreamAsync());
+        var customerInfo = await JsonSerializer.DeserializeAsync<CustomerInfo>(
+            await response.Content.ReadAsStreamAsync());
         
         _logger.LogInformation($"Called CustomerService. Customer was FOUND.");
         
