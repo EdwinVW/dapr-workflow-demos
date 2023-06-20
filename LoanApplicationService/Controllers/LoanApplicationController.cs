@@ -21,7 +21,8 @@ public class LoanApplicationController : ControllerBase
     }
 
     [HttpPost(Name = "StartLoanApplication")]
-    public async Task<LoanApplicationStarted> StartLoanApplication(LoanApplication loanApplication)
+    public async Task<LoanApplicationStarted> StartLoanApplication(
+        LoanApplication loanApplication)
     {
         var instanceId = GenerateId();
 

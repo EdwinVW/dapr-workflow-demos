@@ -89,7 +89,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
                 
                 var customerProposalDecisionReceived =
                     await context.WaitForExternalEventAsync<CustomerProposalDecisionReceived>(
-                        "CustomerProposalDecisionReceived", TimeSpan.FromSeconds(20));
+                        "CustomerProposalDecisionReceived", TimeSpan.FromDays(14));
 
                 proposalAccepted = customerProposalDecisionReceived.Accepted;
                 
