@@ -15,12 +15,14 @@ public class RegisterCustomerActivity : WorkflowActivity<string, CustomerInfo>
 
     public override Task<CustomerInfo> RunAsync(WorkflowActivityContext context, string applicantName)
     {
-        string prospectId = Guid.NewGuid().ToString("D");
         var customerInfo = new CustomerInfo(
             Id: Guid.NewGuid().ToString("D"),
             Name: applicantName,
             OutstandingAmount: 0,
             HasDefaulted: false);
+
+        // Store customer
+        // TODO
 
         _logger.LogInformation($"[Workflow {context.InstanceId}] - New customer was registered.");
 

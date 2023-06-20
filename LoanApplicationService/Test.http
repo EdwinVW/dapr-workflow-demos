@@ -1,14 +1,23 @@
+########################################################
+# Start Loan Application
+########################################################
+
 # @name startLoanApplication
+
 POST http://localhost:5108/LoanApplication
 Content-Type: application/json
 
 {
     "ApplicantName": "Eric White",
-    "LoanAmount": 100000,
+    "LoanAmount": 80000,
     "YearlyGrossSalary": 80000
 }
 
 ### 
+
+########################################################
+# LoanAssessmentCompleted
+########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
@@ -21,6 +30,10 @@ Content-Type: application/json
 
 ### 
 
+########################################################
+# CustomerProposalDecisionReceived
+########################################################
+
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
 POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerProposalDecisionReceived
@@ -31,6 +44,10 @@ Content-Type: application/json
 }
 
 ### 
+
+########################################################
+# CustomerContactedForProposal
+########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
