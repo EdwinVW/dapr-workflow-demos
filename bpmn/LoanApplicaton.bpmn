@@ -110,16 +110,12 @@
     <bpmn:sequenceFlow id="Flow_1bka56x" name="Yes" sourceRef="Gateway_13kw37t" targetRef="act_AssessApplication" />
     <bpmn:sequenceFlow id="Flow_1ff5vom" name="No" sourceRef="Gateway_13kw37t" targetRef="gwy_LoanApproved" />
     <bpmn:textAnnotation id="TextAnnotation_1chzuc1">
-      <bpmn:text>Loan is automatically approved by the system</bpmn:text>
+      <bpmn:text>Loan is automatically approved</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0id1j0f" sourceRef="Flow_1ff5vom" targetRef="TextAnnotation_1chzuc1" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="pcs_LoanApplication">
-      <bpmndi:BPMNShape id="TextAnnotation_1chzuc1_di" bpmnElement="TextAnnotation_1chzuc1">
-        <dc:Bounds x="890" y="10" width="159.9911971830986" height="41.99870274277242" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wopqui_di" bpmnElement="evt_LoadnApplicationReceived">
         <dc:Bounds x="182" y="152" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -194,10 +190,10 @@
           <dc:Bounds x="750" y="202" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0id1j0f_di" bpmnElement="Association_0id1j0f">
-        <di:waypoint x="910" y="80" />
-        <di:waypoint x="925" y="52" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1chzuc1_di" bpmnElement="TextAnnotation_1chzuc1">
+        <dc:Bounds x="890" y="10" width="160" height="42" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1gsraxm_di" bpmnElement="evt_Timeout">
         <dc:Bounds x="1272" y="192" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -325,6 +321,10 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="752" y="121" width="15" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0id1j0f_di" bpmnElement="Association_0id1j0f">
+        <di:waypoint x="910" y="80" />
+        <di:waypoint x="925" y="52" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
