@@ -20,7 +20,7 @@ public class LoanApplicationController : ControllerBase
         _workflowClient = workflowClient;
     }
 
-    [HttpPost(Name = "StartLoanApplication")]
+    [HttpPost("")]
     public async Task<LoanApplicationStarted> StartLoanApplication(
         LoanApplication loanApplication)
     {
@@ -33,6 +33,22 @@ public class LoanApplicationController : ControllerBase
 
         return new LoanApplicationStarted(instanceId);
     }
+
+    [HttpPost("{instanceId}/RaiseLoanAssessmentCompleted")]
+    public async Task<ActionResult> RaiseLoanAssessmentCompleted(
+        string instanceId,
+        [FromBody] LoanAssessmentCompleted loanAssessmentCompleted)
+    {
+        var assessmentResult = loanAssessmentCompleted.Approved ? "Approved" : "Rejected";
+        _logger.LogInformation($"Raising LoanAssessmentCompleted for {instanceId} with result {assessmentResult}...");
+        
+        await _workflowClient.RaiseEventAsync(
+            instanceId: instanceId,
+            eventName: "LoanAssessmentCompleted",
+            eventPayload: loanAssessmentCompleted);
+
+        return Ok();
+    }    
 
     private string GenerateId()
     {

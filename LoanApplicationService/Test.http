@@ -16,7 +16,22 @@ Content-Type: application/json
 ### 
 
 ########################################################
-# LoanAssessmentCompleted
+# LoanAssessmentCompleted using Web API
+########################################################
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseLoanAssessmentCompleted
+Content-Type: application/json
+
+{
+    "Approved": true
+}
+
+### 
+
+########################################################
+# LoanAssessmentCompleted using Dapr sidecar
 ########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
@@ -31,7 +46,7 @@ Content-Type: application/json
 ### 
 
 ########################################################
-# CustomerProposalDecisionReceived
+# CustomerProposalDecisionReceived using Dapr sidecar
 ########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
@@ -46,7 +61,7 @@ Content-Type: application/json
 ### 
 
 ########################################################
-# CustomerContactedForProposal
+# CustomerContactedForProposal using Dapr sidecar
 ########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
