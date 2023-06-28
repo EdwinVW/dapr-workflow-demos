@@ -13,20 +13,30 @@ Content-Type: application/json
     "YearlyGrossSalary": 80000
 }
 
-### 
+###
 
 ########################################################
-# LoanAssessmentCompleted using Web API
+# Get workflow instance
 ########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseLoanAssessmentCompleted
-Content-Type: application/json
+GET http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}
 
-{
-    "Approved": true
-}
+### 
+
+########################################################
+# LoanAssessmentCompleted using Web API (broken!)
+########################################################
+
+# @instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+# POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseLoanAssessmentCompleted
+# Content-Type: application/json
+
+# {
+#     "Approved": true
+# }
 
 ### 
 
