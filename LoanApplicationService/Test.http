@@ -8,7 +8,7 @@ POST http://localhost:5108/LoanApplication
 Content-Type: application/json
 
 {
-    "ApplicantName": "Eric White",
+    "ApplicantName": "Eric Grey",
     "LoanAmount": 80000,
     "YearlyGrossSalary": 80000
 }
@@ -26,17 +26,17 @@ GET http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}
 ### 
 
 ########################################################
-# LoanAssessmentCompleted using Web API (broken!)
+# LoanAssessmentCompleted using Web API
 ########################################################
 
-# @instanceId = {{startLoanApplication.response.body.$.instanceId}}
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-# POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseLoanAssessmentCompleted
-# Content-Type: application/json
+POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseLoanAssessmentCompleted
+Content-Type: application/json
 
-# {
-#     "Approved": true
-# }
+{
+    "Approved": true
+}
 
 ### 
 
@@ -56,12 +56,42 @@ Content-Type: application/json
 ### 
 
 ########################################################
+# CustomerProposalDecisionReceived using Web API
+########################################################
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseCustomerProposalDecisionReceived
+Content-Type: application/json
+
+{
+    "Accepted": true
+}
+
+### 
+
+########################################################
 # CustomerProposalDecisionReceived using Dapr sidecar
 ########################################################
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
 POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerProposalDecisionReceived
+Content-Type: application/json
+
+{
+    "Accepted": true
+}
+
+### 
+
+########################################################
+# CustomerContactedForProposal using Web API
+########################################################
+
+@instanceId = {{startLoanApplication.response.body.$.instanceId}}
+
+POST http://localhost:5108/LoanApplication/{{instanceId}}/RaiseCustomerContactedForProposal
 Content-Type: application/json
 
 {

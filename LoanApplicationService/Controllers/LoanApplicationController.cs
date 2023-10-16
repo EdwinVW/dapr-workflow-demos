@@ -50,6 +50,38 @@ public class LoanApplicationController : ControllerBase
         return Ok();
     }    
 
+    [HttpPost("{instanceId}/RaiseCustomerProposalDecisionReceived")]
+    public async Task<ActionResult> RaiseCustomerProposalDecisionReceived(
+        string instanceId,
+        [FromBody] CustomerProposalDecisionReceived customerProposalDecisionReceived)
+    {
+        var decisionResult = customerProposalDecisionReceived.Accepted ? "Accepted" : "Declined";
+        _logger.LogInformation($"Raising CustomerProposalDecisionReceived for {instanceId} with result {decisionResult}...");
+        
+        await _workflowClient.RaiseEventAsync(
+            instanceId: instanceId,
+            eventName: "CustomerProposalDecisionReceived",
+            eventPayload: customerProposalDecisionReceived);
+
+        return Ok();
+    }      
+
+    [HttpPost("{instanceId}/RaiseCustomerContactedForProposal")]
+    public async Task<ActionResult> RaiseCustomerContactedForProposal(
+        string instanceId,
+        [FromBody] CustomerContactedForProposal customerContactedForProposal)
+    {
+        var decisionResult = customerContactedForProposal.Accepted ? "Accepted" : "Declined";
+        _logger.LogInformation($"Raising CustomerContactedForProposal for {instanceId} with result {decisionResult}...");
+        
+        await _workflowClient.RaiseEventAsync(
+            instanceId: instanceId,
+            eventName: "CustomerContactedForProposal",
+            eventPayload: customerContactedForProposal);
+
+        return Ok();
+    }     
+
     private string GenerateId()
     {
         var ticks = new DateTime(2016, 1, 1).Ticks;

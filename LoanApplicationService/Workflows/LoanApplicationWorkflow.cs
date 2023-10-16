@@ -93,7 +93,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
 
                 proposalAccepted = customerProposalDecisionReceived.Accepted;
                 
-                await Log(context, $"Proposal was {(proposalAccepted ? "Accepted" : "Rejected")}.");
+                await Log(context, $"Proposal was {(proposalAccepted ? "Accepted" : "Declined")}.");
             }
             catch (TaskCanceledException)
             {
