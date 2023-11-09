@@ -1,0 +1,14 @@
+version: 1
+apps:
+  - appID: CustomerService
+    appDirPath: ./CustomerService/
+    appPort: 5070
+    daprHTTPPort: 3600
+    command: ["dotnet","run"]
+
+  - appID: LoanApplicationService
+    appDirPath: ./LoanApplicationService/
+    appPort: 5108
+    daprHTTPPort: 3500
+    daprGRPCPort: 4001
+    command: ["dotnet","run"]

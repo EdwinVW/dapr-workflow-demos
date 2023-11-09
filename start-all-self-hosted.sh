@@ -1,0 +1,1 @@
+dapr run -f ./start-all-self-hosted.yaml
