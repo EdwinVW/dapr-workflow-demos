@@ -1,2 +1,2 @@
 # dapr-workflow-demos
-Contains demos using in my Dapr Workflow sessions.
+Contains the code for the demos I use in my Dapr Workflow sessions.
