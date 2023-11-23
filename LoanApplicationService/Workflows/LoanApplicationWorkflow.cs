@@ -73,22 +73,18 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, LoanApplication
                 await WaitForCustomerDecision(context);
 
             // Handle customer decision
+            bool proposalWasAccepted = customerDecisionResult.ProposalWasAccepted;
             if (!customerDecisionResult.CustomerDecisionWasReceivedWithinTimeout)
             {
                 // Contact the customer
-                bool proposalWasAccepted = await ContactCustomerForDecision(context);
-
-                if (!proposalWasAccepted)
-                {
-                    return new LoanApplicationResult(false);
-                }
+                proposalWasAccepted = await ContactCustomerForDecision(context);
             }
-            else if (!customerDecisionResult.ProposalWasAccepted)
+            if (!proposalWasAccepted)
             {
                 return new LoanApplicationResult(false);
             }
 
-            // At this point, the proposal was accepted by the customer
+            // At this point, the proposal is accepted by the customer
 
             // Register Contract
             await RegisterContract(context, loanInfo);
