@@ -14,7 +14,7 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
     public DetermineExistingCustomerActivity(ILoggerFactory loggerFactory, DaprClient daprClient)
     {
         _logger = loggerFactory.CreateLogger<DetermineExistingCustomerActivity>();
-        this._daprClient = daprClient;
+        _daprClient = daprClient;
     }
 
     public override async Task<CustomerInfo?> RunAsync(WorkflowActivityContext context, string applicantName)
