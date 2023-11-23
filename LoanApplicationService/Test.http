@@ -8,7 +8,7 @@ POST http://localhost:5108/LoanApplication
 Content-Type: application/json
 
 {
-    "ApplicantName": "Eric Grey",
+    "ApplicantName": "Eric White",
     "LoanAmount": 80000,
     "YearlyGrossSalary": 80000
 }
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-GET http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}
+GET http://localhost:3500/v1.0-beta1/workflows/dapr/{{instanceId}}
 
 ### 
 
@@ -46,7 +46,7 @@ Content-Type: application/json
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/LoanAssessmentCompleted
+POST http://localhost:3500/v1.0-beta1/workflows/dapr/{{instanceId}}/raiseEvent/LoanAssessmentCompleted
 Content-Type: application/json
 
 {
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerProposalDecisionReceived
+POST http://localhost:3500/v1.0-beta1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerProposalDecisionReceived
 Content-Type: application/json
 
 {
@@ -106,7 +106,7 @@ Content-Type: application/json
 
 @instanceId = {{startLoanApplication.response.body.$.instanceId}}
 
-POST http://localhost:3500/v1.0-alpha1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerContactedForProposal
+POST http://localhost:3500/v1.0-beta1/workflows/dapr/{{instanceId}}/raiseEvent/CustomerContactedForProposal
 Content-Type: application/json
 
 {
