@@ -5,9 +5,9 @@ using Dapr.Workflow;
 using LoanApplicationService.Workflows.Activities;
 using LoanApplicationService.Models;
 
-public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResult>
+public class LoanApplicationWorkflow : Workflow<LoanApplication, LoanApplicationResult>
 {
-    public override async Task<ApplicationResult> RunAsync(
+    public override async Task<LoanApplicationResult> RunAsync(
         WorkflowContext context, LoanApplication application)
     {
         try
@@ -62,7 +62,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             {
                 // Send rejection letter
                 await SendRejectionLetterToCustomer(context, loanInfo);
-                return new ApplicationResult(false);
+                return new LoanApplicationResult(false);
             }
 
             // Send proposal
@@ -80,12 +80,12 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
 
                 if (!proposalWasAccepted)
                 {
-                    return new ApplicationResult(false);
+                    return new LoanApplicationResult(false);
                 }
             }
             else if (!customerDecisionResult.ProposalWasAccepted)
             {
-                return new ApplicationResult(false);
+                return new LoanApplicationResult(false);
             }
 
             // At this point, the proposal was accepted by the customer
@@ -96,7 +96,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, ApplicationResu
             // Send contract to customer
             await SendContract(context, loanInfo);
 
-            return new ApplicationResult(true);
+            return new LoanApplicationResult(true);
         }
         catch (Exception ex)
         {
