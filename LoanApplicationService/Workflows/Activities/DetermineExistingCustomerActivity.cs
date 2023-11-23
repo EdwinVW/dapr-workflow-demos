@@ -9,10 +9,12 @@ using Microsoft.Extensions.Logging;
 public class DetermineExistingCustomerActivity : WorkflowActivity<string, CustomerInfo?>
 {
     private readonly ILogger _logger;
+    private readonly DaprClient _daprClient;
 
-    public DetermineExistingCustomerActivity(ILoggerFactory loggerFactory)
+    public DetermineExistingCustomerActivity(ILoggerFactory loggerFactory, DaprClient daprClient)
     {
         _logger = loggerFactory.CreateLogger<DetermineExistingCustomerActivity>();
+        this._daprClient = daprClient;
     }
 
     public override async Task<CustomerInfo?> RunAsync(WorkflowActivityContext context, string applicantName)
@@ -20,12 +22,12 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
         _logger.LogInformation(
                 $"[Workflow {context.InstanceId}] - Determine existing client using the CustomerService.");
 
-        using var client = new DaprClientBuilder().Build();
-        var request = client.CreateInvokeMethodRequest(
+        var request = _daprClient.CreateInvokeMethodRequest(
             HttpMethod.Get, 
             "CustomerService", 
             $"customer/{applicantName}");
-        var response = await client.InvokeMethodWithResponseAsync(request);
+            
+        var response = await _daprClient.InvokeMethodWithResponseAsync(request);
         
         if (!response.IsSuccessStatusCode)
         {
