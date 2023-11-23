@@ -1,1 +1,1 @@
-dapr run --app-id CustomerService --dapr-http-port 3600 --app-port 5070 dotnet run
+dapr run --app-id CustomerService --dapr-http-port 3600 --app-port 5070 --config ../.dapr/config.yaml dotnet run

@@ -1,1 +1,1 @@
-dapr run --app-id LoanApplicationService --dapr-http-port 3500 --dapr-grpc-port 4001 --app-port 5108 dotnet run
+dapr run --app-id LoanApplicationService --dapr-http-port 3500 --dapr-grpc-port 4001 --app-port 5108 --config ../.dapr/config.yaml dotnet run
