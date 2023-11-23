@@ -4,7 +4,7 @@ using Dapr.Workflow;
 using LoanApplicationService.Models;
 using Microsoft.Extensions.Logging;
 
-public class RegisterCustomerActivity : WorkflowActivity<string, CustomerInfo>
+public class RegisterCustomerActivity : WorkflowActivity<CustomerInfo, object?>
 {
     private readonly ILogger _logger;
 
@@ -13,19 +13,13 @@ public class RegisterCustomerActivity : WorkflowActivity<string, CustomerInfo>
         _logger = loggerFactory.CreateLogger<RegisterCustomerActivity>();
     }
 
-    public override Task<CustomerInfo> RunAsync(WorkflowActivityContext context, string applicantName)
+    public override Task<object?> RunAsync(WorkflowActivityContext context, CustomerInfo customerInfo)
     {
-        var customerInfo = new CustomerInfo(
-            Id: Guid.NewGuid().ToString("D"),
-            Name: applicantName,
-            OutstandingAmount: 0,
-            HasDefaulted: false);
-
         // Store customer
-        // TODO
+        // TODO: Store customer in database
 
         _logger.LogInformation($"[Workflow {context.InstanceId}] - New customer was registered.");
 
-        return Task.FromResult(customerInfo);
+        return Task.FromResult<object?>(null);
     }
 }

@@ -17,6 +17,9 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
 
     public override async Task<CustomerInfo?> RunAsync(WorkflowActivityContext context, string applicantName)
     {
+        _logger.LogInformation(
+                $"[Workflow {context.InstanceId}] - Determine existing client using the CustomerService.");
+
         using var client = new DaprClientBuilder().Build();
         var request = client.CreateInvokeMethodRequest(
             HttpMethod.Get, 
@@ -34,7 +37,7 @@ public class DetermineExistingCustomerActivity : WorkflowActivity<string, Custom
         var customerInfo = await JsonSerializer.DeserializeAsync<CustomerInfo>(
             await response.Content.ReadAsStreamAsync());
         
-        _logger.LogInformation($"Called CustomerService. Customer was FOUND.");
+        _logger.LogInformation($"[Workflow {context.InstanceId}] - Called CustomerService. Customer was FOUND.");
         
         return customerInfo;
     }
