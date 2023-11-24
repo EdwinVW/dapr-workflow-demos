@@ -160,7 +160,7 @@ public class LoanApplicationWorkflow : Workflow<LoanApplication, LoanApplication
     /// </summary>
     private async Task SendRejectionLetterToCustomer(WorkflowContext context, LoanInfo loanInfo)
     {
-        await context.CallActivityAsync<RiskProfile>(
+        await context.CallActivityAsync<object>(
             nameof(SendRejectionLetterActivity),
             loanInfo);
     }
